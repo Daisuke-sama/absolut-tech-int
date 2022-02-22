@@ -1,0 +1,25 @@
+security:
+    enable_authenticator_manager: true
+    password_hashers:
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+    providers:
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: apiToken
+
+    firewalls:
+        test:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+        api:
+            pattern: '[^(/user\/(confirm|reg|auth))]'
+#            pattern: /user/profile
+            stateless: true
+            guard:
+                authenticators:
+                    - App\AuthService\Security\ApiTokenAuthenticator
+        main:
+            pattern: ^/*
+            lazy: true
+            security: true
+
